@@ -6,7 +6,7 @@ const CopyWebpackPlugin = require("copy-webpack-plugin");
 const rootDir = process.cwd();
 
 module.exports = {
-  entry: path.resolve(rootDir, "src/index.ts"),
+  entry: path.resolve(rootDir, "src/index.tsx"),
   output: {
     path: path.resolve(rootDir, "dist"),
     filename: "bundle.[contenthash:8].js",
@@ -29,6 +29,7 @@ module.exports = {
             options: {},
           },
         ],
+        include: path.resolve(rootDir, "src"),
         exclude: /node_modules/,
       },
       {
@@ -62,7 +63,7 @@ module.exports = {
     ],
   },
   resolve: {
-    extensions: ["ts", "tsx", "js"],
+    extensions: [".ts", ".tsx", ".js"],
   },
   plugins: [
     new HtmlWebpackPlugin({

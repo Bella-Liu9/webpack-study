@@ -71,6 +71,18 @@ module: {
     ]
 },
 resolve: {
-  extensions: ['.tsx', '.ts', '.js'],
+  extensions: ['.tsx', '.ts', '.js'], // 定义解析顺序
 },
 ```
+
+- resolve extensions 说明
+
+尝试按顺序解析这些扩展。如果多个文件共享相同的名称但具有不同的扩展名，webpack 将使用数组中第一个列出的扩展名解析文件并跳过其余文件。
+
+# 支持 React
+
+- 项目依赖 -- react react-dom
+
+> yarn add react react-dom
+
+> yarn add --dev @types/react @types/react-dom
