@@ -6,13 +6,31 @@ const CopyWebpackPlugin = require("copy-webpack-plugin");
 const rootDir = process.cwd();
 
 module.exports = {
-  entry: path.resolve(rootDir, "src/index.js"),
+  entry: path.resolve(rootDir, "src/index.ts"),
   output: {
     path: path.resolve(rootDir, "dist"),
     filename: "bundle.[contenthash:8].js",
   },
   module: {
     rules: [
+      {
+        test: /.(ts|tsx)$/, // 因为之后要适配 react，所以这里提前写入 tsx
+        use: [
+          "babel-loader",
+          {
+            loader: "ts-loader",
+            options: {
+              happyPackMode: true,
+              transpileOnly: true,
+            },
+          },
+          {
+            loader: "thread-loader",
+            options: {},
+          },
+        ],
+        exclude: /node_modules/,
+      },
       {
         test: /\.(jsx|js)$/,
         use: ["babel-loader", "thread-loader"],
@@ -42,6 +60,9 @@ module.exports = {
         type: "asset",
       },
     ],
+  },
+  resolve: {
+    extensions: ["ts", "tsx", "js"],
   },
   plugins: [
     new HtmlWebpackPlugin({
