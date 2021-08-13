@@ -86,3 +86,39 @@ resolve: {
 > yarn add react react-dom
 
 > yarn add --dev @types/react @types/react-dom
+
+- 将 index.js 改为 index.tsx 并用 react 写入
+
+* 注
+
+1. 同时修改 webpack 中关于 index.js 的相关路径， 比如 "entry" 和 package.json 的 "main"
+2. 同时修改 public/index.html 在 body 中添加 div#root
+
+# babel 支持 react 和 懒加载(react.lazy()&Suspend)
+
+- 所需依赖 -- @babel/plugin-syntax-dynamic-import @babel/preset-react
+
+> yarn add --dev @babel/plugin-syntax-dynamic-import @babel/preset-react
+
+- .babelrc
+
+```json
+{
+  "presets": [
+    ["@babel/preset-env"],
+    // 新增
+    ["@babel/preset-react", { "targets": { "node": "current" } }]
+  ],
+  "plugins": [
+    ["@babel/plugin-transform-runtime", { "corejs": 3 }],
+    ["@babel/plugin-proposal-decorators", { "legacy": true }],
+    ["@babel/plugin-proposal-class-properties", { "loose": true }],
+    ["@babel/plugin-proposal-private-methods", { "loose": true }],
+    // 新增
+    ["@babel/plugin-syntax-dynamic-import"]
+  ]
+}
+```
+
+- 为什么要让 babel 支持 react
+  https://segmentfault.com/a/1190000022415711
