@@ -260,3 +260,127 @@ module.exports = merge(baseConfig, {
   dart-sass 是用 drat VM 来编译 sass；
 * node-sass 是自动编译实时的，dart-sass 需要保存后才会生效
   推荐 dart-sass 性能更好（也是 sass 官方使用的），而且 node-sass 因为国情问题经常装不上
+
+## webpack 配置
+
+- webpack.base.config.js
+
+```js
+module.exports = {
+  // ...
+  module: {
+    rules: [
+      // ...
+      {
+        test: /\.(s[ac]ss|css)$/i,
+        exclude: /node_modules/,
+        use: ["style-loader", "css-loader", "sass-loader"],
+      },
+    ],
+  },
+  // ...
+};
+```
+
+## 支持 postcss
+
+是一个用 JavaScript 工具和插件转换 CSS 代码的工具(自动兼容)
+
+- 所需插件 -- autoprefixer postcss postcss-loader
+
+> yarn add --dev autoprefixer postcss postcss-loader
+
+### 配置 rules
+
+```js
+const autoprefixer = require('autoprefixer');
+
+……
+use: [
+  "style-loader",
+  "css-loader",
+  "sass-loader",
+  {
+    loader: "postcss-loader",
+    options: {
+      postcssOption: {
+        plugins: [["autoprefixer"]],
+      },
+    },
+  },
+];
+```
+
+- 更多参数设置
+  https://github.com/postcss/autoprefixer#options
+  https://postcss.org/api/
+
+## 抽离 css 文件
+
+- 所需插件 -- mini-css-extract-plugin
+
+> yarn add --dev mini-css-extract-plugin
+
+### 配置 use
+
+- MiniCssExtractPlugin.loader 代替 style-loader
+
+* 二者不能同时存在 style-loader 会报错
+
+```js
+MiniCssExtractPlugin.loader,
+```
+
+### 配置 plugins
+
+```js
+plugins: [
+  // 省略...
+  new MiniCssExtractPlugin({
+    filename: 'css/[name].css',
+  }),
+],
+```
+
+# 将 public 中的静态资源直接复制到打包目录
+
+- 所需插件 -- copy-webpack-plugin
+
+> yarn add --dev copy-webpack-plugin
+
+## 配置 plugins
+
+```js
+plugins: [
+  new CopyWebpackPlugin({
+    patterns: [
+      {
+        from: "*",
+        context: path.resolve(rootDir, "public"),
+        to: path.resolve(rootDir, "dist"),
+        globOptions: {
+          ignore: path.resolve(rootDir, "public/index.html"), // 需除去index.html,因为打包时会生成造成冲突
+        },
+      },
+    ],
+  }),
+];
+```
+
+## 加载图片资源
+
+### webpack4
+
+raw-loader、url-loader、file-loader
+
+### webapck5
+
+```js
+rules: [
+  // ...
+  {
+    test: /\.(png|jpg|gif|jpeg|webp|svg|eot|ttf|woff|woff2)$/,
+    type: "asset",
+  },
+];
+```
