@@ -9,4 +9,7 @@ module.exports = merge(baseConfig, {
     stats: "errors-only", // 终端仅打印 error
     compress: true, // 是否启用 gzip 压缩
   },
+  cache: {
+    type: "memory", // 相当于true
+  },
 });

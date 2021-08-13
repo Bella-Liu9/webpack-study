@@ -15,12 +15,12 @@ module.exports = {
     rules: [
       {
         test: /\.(jsx|js)$/,
-        use: "babel-loader",
+        use: ["babel-loader", "thread-loader"],
         include: path.resolve(rootDir, "src"),
         exclude: /node_modules/,
       },
       {
-        test: /\.(sass|scss|css)$/i,
+        test: /\.(s[ac]ss|css)$/i,
         exclude: /node_modules/,
         use: [
           MiniCssExtractPlugin.loader,
@@ -34,6 +34,7 @@ module.exports = {
               },
             },
           },
+          "thread-loader",
         ],
       },
       {
@@ -64,4 +65,9 @@ module.exports = {
       ],
     }),
   ],
+  optimization: {
+    splitChunks: {
+      chunks: "all", // 代码分割类型：all全部模块，async异步模块，initial入口模块
+    },
+  },
 };

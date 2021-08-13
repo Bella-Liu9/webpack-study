@@ -384,3 +384,47 @@ rules: [
   },
 ];
 ```
+
+---进阶
+
+# 缓存优化
+
+- webpack.dev.config.js
+
+```js
+cache: {
+  type: "memory", // 相当于true
+},
+```
+
+- webpack.prod.config.js
+
+```js
+cache: {
+  type: "filesystem", // 触发buildDependencies
+  buildDependencies: {
+    config: [__filename], // 定义缓存路径
+  },
+},
+```
+
+# 拆分代码
+
+```js
+optimization: {
+  splitChunks: {
+    chunks: 'all' // 代码分割类型：all全部模块，async异步模块，initial入口模块
+  }
+},
+```
+
+# 多线程打包
+
+- 所需插件 -- thread-loader
+
+> yarn add --dev thread-loader
+
+在使用线程的 use 中使用
+
+- 注：
+  loader 的执行顺序--从下向上
