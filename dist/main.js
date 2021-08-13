@@ -1,1 +1,0 @@
-new class{constructor(){console.log("hello webpack!")}};
